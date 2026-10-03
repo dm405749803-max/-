@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>易获易成 · 企业微信销售副驾</title>
+  <link rel="stylesheet" href="sales-copilot.css">
+</head>
+<body>
+  <header class="preview-bar"><span><i class="live-dot"></i>企业微信副驾 · 本机预览 <b>消息不会发给真实客户</b></span><div><button id="supervisor-toggle">主管视图</button><a id="sidebar-link" href="?mode=sidebar" target="_blank">单独打开侧栏 ↗</a><a href="sales-workbench.html">原工作台</a></div></header>
+  <div id="connection-error" class="connection-error" hidden role="alert"></div>
+  <main class="desktop" id="desktop">
+    <nav class="host-rail" aria-label="会话导航"><div class="host-logo">企</div><span class="rail-active">聊</span><span>客</span><span>办</span><div class="rail-bottom">陈</div></nav>
+    <aside class="contacts"><header><h2>客户会话</h2><span class="subtle">演练客户 · 隔离数据</span></header><label class="search"><input id="search" placeholder="搜索客户" aria-label="搜索客户"></label><div id="contacts-list"></div><footer>会话切换时，右侧副驾同步切换。<br>未发送的编辑会为每位客户保留。</footer></aside>
+    <section class="chat-host"><header class="chat-title"><div><h1 id="chat-name">正在加载</h1><span class="subtle">企业微信会话布局预览</span></div><span class="customer-label">外部联系人</span></header><div class="chat-context"><span>客户消息已授权用于本机演练</span><span>销售确认后才发送</span></div><div id="messages" class="messages" aria-live="polite"></div><form id="message-form" class="customer-input"><div><span>模拟客户发来消息</span><small>按 Enter 发送，Shift + Enter 换行</small></div><textarea id="customer-message" maxlength="2000" placeholder="输入客户问题，观察副驾如何协助…" aria-label="模拟客户消息"></textarea><div class="message-actions"><button type="button" id="simulate-risk">演练风险提醒</button><button type="submit" class="primary">添加客户消息</button></div></form></section>
+    <aside class="copilot" aria-label="易获易成销售副驾">
+      <header class="copilot-brand"><div class="brand-icon">易</div><div><h1>易获易成 <span>销售副驾</span></h1><p>有据可依，由你决定</p></div><button id="refresh" aria-label="刷新客户" title="刷新">↻</button></header>
+      <div class="bound-customer"><span>当前客户</span><select id="customer-select" aria-label="当前客户"></select><span class="bound-chip">已绑定</span></div>
+      <section id="risk-card" class="risk-card" hidden aria-live="polite"></section>
+      <nav class="copilot-tabs" aria-label="副驾功能"><button data-tab="reply" class="active">回复助手</button><button data-tab="profile">客户画像</button><button data-tab="products">产品建议</button><button data-tab="followup">跟进</button></nav>
+      <div class="copilot-content">
+        <section data-panel="reply">
+          <div class="section-heading"><div><span class="eyebrow">本轮建议</span><h2 id="suggestion-title">先了解，再推荐</h2></div><span id="draft-provider" class="tag">加载中</span></div>
+          <p id="suggestion-copy" class="suggestion-copy">正在读取当前客户的会话和待确认草稿。</p>
+          <div class="editor-card"><div class="editor-head"><strong>给客户的回复</strong><span id="editor-status" role="status">尚未发送</span></div><textarea id="draft-editor" maxlength="4000" placeholder="点击生成草稿，核对并修改后再发送。" aria-label="回复草稿"></textarea><div class="editor-meta"><span id="edit-label">原稿与终稿分别保存</span><span id="char-count">0 字</span></div></div>
+          <div class="draft-tools"><button id="generate">✧ 生成草稿</button><button id="restore">恢复原稿</button><button id="discard" class="quiet">放弃此稿</button></div>
+          <details class="source-details"><summary>原稿与回复依据 <span id="citation-count">0</span></summary><p id="original-draft" class="original"></p><div id="citations"></div></details>
+          <div id="delivery-status" class="delivery-status" hidden role="status"></div>
+          <div class="send-area"><label>演练发送回执<select id="send-outcome" aria-label="演练发送回执"><option value="success">发送成功</option><option value="failed">发送失败</option><option value="unknown">结果未知</option></select></label><button id="send" class="primary send">确认并模拟发送 <span>↗</span></button><small>仅成功回执计入采纳；失败或未知保留终稿。</small></div>
+          <details class="media-box"><summary>客户语音转写</summary><p>上传已获授权的语音，试听并核对文字后才加入会话。</p><input type="file" id="audio-file" accept="audio/*"><audio id="audio-player" controls hidden></audio><button id="transcribe">识别语音</button><textarea id="transcript" placeholder="识别结果会显示在这里，可在确认前修正。" aria-label="语音识别候选文字"></textarea><button id="confirm-transcript">核对完成，加入会话</button></details>
+        </section>
+        <section data-panel="profile" hidden><div class="section-heading"><div><span class="eyebrow">确认后才记住</span><h2>客户画像</h2></div><button id="extract-profile">提取候选</button></div><div class="fact"><span>已确认意向</span><strong id="confirmed-intent">待确认</strong></div><label class="stage-control">销售阶段<select id="sales-stage" aria-label="销售阶段"><option value="new_contact">新接触</option><option value="discovery">需求了解</option><option value="solution_discussion">方案沟通</option><option value="closing">促成确认</option><option value="won">已成交</option><option value="paused">暂停</option></select></label><h3>已确认信息</h3><div id="facts"></div><h3>待确认变化</h3><div id="proposals"></div></section>
+        <section data-panel="products" hidden><div class="section-heading"><div><span class="eyebrow">依据已确认画像</span><h2>产品建议</h2></div><button id="match-products">重新匹配</button></div><p class="subtle">核对候选、适配理由与信息缺口。采纳后可用于下一次草稿。</p><div id="recommendations"></div></section>
+        <section data-panel="followup" hidden><div class="section-heading"><div><span class="eyebrow">把下一步记下来</span><h2>客户跟进</h2></div></div><form id="followup-form"><label>跟进事项<input id="followup-title" required maxlength="150" placeholder="例如：核对妈妈年龄后再约沟通"></label><label>时间<input id="followup-time" required type="datetime-local"></label><button class="primary" type="submit">保存跟进计划</button></form><div id="tasks"></div></section>
+      </div>
+      <footer class="copilot-footer"><span><i class="live-dot"></i>本机服务</span><span>确认 · 编辑 · 可追溯</span></footer>
+    </aside>
+  </main>
+  <section id="supervisor-view" class="supervisor-view" hidden><header><span class="eyebrow">销售主管</span><h1>超时风险提醒</h1><p>仅显示超过5分钟仍未接手的客户。销售接手后自动移出。</p><small>本机演练按连续时间计时；企业营业日历在正式接入时配置。</small></header><div id="overdue-list"></div></section>
+  <div id="toast" role="status" class="toast" hidden></div>
+  <dialog id="action-dialog"><h2 id="dialog-title"></h2><p id="dialog-copy"></p><div class="dialog-actions"><button id="dialog-cancel">取消</button><button class="primary" id="dialog-confirm">确认</button></div></dialog>
+  <script src="v2-api.js"></script><script src="copilot-channel.js"></script><script src="sales-copilot.js"></script>
+</body>
+</html>

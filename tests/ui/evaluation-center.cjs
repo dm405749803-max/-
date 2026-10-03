@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const html=fs.readFileSync(path.join(__dirname,'../../dist/evaluation-center.html'),'utf8');
+const js=fs.readFileSync(path.join(__dirname,'../../dist/evaluation-center.js'),'utf8');
+assert.match(html,/100个评测案例/);
+assert.match(html,/正确标准/);
+assert.match(html,/不通过情况/);
+assert.match(html,/运行本案例/);
+assert.match(html,/人工判定/);
+assert.match(js,/\/api\/evaluation\/cases/);
+assert.match(js,/\/api\/evaluation\/results/);
+assert.match(js,/workspace='evaluation_v1'/);
+assert.match(js,/\/api\/v2\/opportunities\/\$\{encodeURIComponent\(fixture\.opportunityId\)\}\/drafts/);
+assert.match(js,/requires_human_judgment|automaticChecks/);
+assert.doesNotMatch(js,/fetch\(['"]https?:\/\//);
+console.log('PASS — evaluation center uses isolated local data, 100 business cases, real backend APIs, and human verdicts.');

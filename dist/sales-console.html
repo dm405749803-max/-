@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>销售操作端 · 同频</title>
+  <meta name="description" content="保险销售双视角联调的销售操作端。">
+  <link rel="stylesheet" href="dual-test.css">
+  <link rel="stylesheet" href="safety-status.css">
+</head>
+<body class="sales-page">
+  <header class="dual-topbar sales-topbar">
+    <div><strong>销售操作端</strong><small>基础信息问询自动回复；产品、方案与异议回复仍由销售确认</small></div>
+    <nav><span id="knowledge-chip" class="safety-chip ok">知识版本正常</span><span id="budget-chip" class="safety-chip ok">AI成本 0%</span><a href="/quality-dashboard.html">质量与上线</a><a href="/customer-simulator.html" target="_blank">打开客户模拟端</a><a href="/backend-test.html">返回联调台</a></nav>
+  </header>
+  <main class="sales-layout">
+    <aside class="sales-card customer-summary">
+      <div class="card-head"><h1>当前客户</h1><span id="lead-state" class="pill">等待会话</span></div>
+      <dl id="sales-profile"></dl>
+      <section class="sales-tasks"><h2>待处理事项</h2><div id="sales-tasks"><p>当前没有待处理事项。</p></div></section>
+      <p class="safe-note">演练数据只保存在本机，不连接真实微信。</p>
+    </aside>
+    <section class="sales-card sales-conversation">
+      <div class="card-head"><div><h1>客户会话</h1><small>每1.5秒同步客户模拟端</small></div><button id="refresh-sales" type="button" class="quiet-button">刷新</button></div>
+      <div id="sales-chat" class="sales-chat" aria-live="polite"></div>
+    </section>
+    <aside class="sales-card draft-card">
+      <div class="card-head"><div><h1>AI回复草稿</h1><small>客户现在看不到</small></div><span id="draft-state" class="pill neutral">未生成</span></div>
+      <div id="draft-empty" class="draft-empty">客户发来消息后，中控会自动生成草稿。</div>
+      <div id="draft-editor" hidden>
+        <textarea id="sales-draft" aria-label="销售回复草稿" maxlength="4000"></textarea>
+        <div id="draft-evidence" class="draft-evidence"></div>
+      </div>
+      <div class="draft-actions"><button id="generate-draft" type="button" class="secondary-button">重新生成草稿</button><button id="confirm-draft" type="button" class="primary-button" disabled>确认并模拟发送</button></div>
+      <div id="sales-status" class="inline-status">请先在客户模拟端开始新会话。</div>
+    </aside>
+  </main>
+  <div id="safety-modal" class="safety-modal" hidden role="alertdialog" aria-modal="true" aria-labelledby="safety-modal-title">
+    <div><h2 id="safety-modal-title">需要销售处理</h2><p id="safety-modal-message"></p><button id="close-safety-modal" type="button" class="primary-button">我知道了</button></div>
+  </div>
+  <script src="dual-test-common.js"></script>
+  <script src="sales-console.js"></script>
+</body>
+</html>

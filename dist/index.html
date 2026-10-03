@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>同频 · AI 销售工作台 Demo</title>
+  <meta name="description" content="保险销售工作台 Demo：内容获客、视频粗剪、Dify 销售辅助、计划书年度利益测算、资料更新与经验复盘。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%233e61e8'/%3E%3Cpath d='M8 10h16M12 10v14m8-14v14' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ <div class="app-shell">
+  <aside class="sidebar">
+   <div class="brand"><span class="brand-mark">同</span><div><strong>同频</strong><small>AI 销售工作台</small></div></div>
+   <div class="workspace"><span class="avatar small">演</span><div>个人销售工作区<small>交互 Demo · 单销售</small></div></div>
+   <nav id="navigation" aria-label="工作台导航"></nav>
+   <div class="side-bottom"><button class="nav-item" data-view="settings"><span aria-hidden="true">⚙</span>连接与设置</button><div class="side-note" id="storage-note">模拟数据 · 正在检查保存方式</div></div>
+  </aside>
+  <div class="workspace-main">
+   <header class="topbar"><div id="breadcrumb">销售 / 客户工作台</div><div class="top-actions"><span class="status-pill">演示模式</span><button class="icon-button" data-view="tasks" aria-label="查看待办">☷</button><span class="avatar small">演</span></div></header>
+   <div class="demo-notice"><span id="connection-notice">正在检查本地 AI 连接。回复不会自动发送或发布。</span><button class="text-button" data-view="settings">查看接入状态 ↗</button></div>
+   <main id="main"></main>
+  </div>
+ </div>
+ <div id="toast" role="status" aria-live="polite"></div>
+ <dialog id="modal"><div id="modal-content"></div></dialog>
+<script src="v2-api.js"></script>
+<script src="app.js"></script>
+<script src="modules.js"></script>
+<script src="workbench-v2.js"></script>
+<script src="sales-review-ui.js"></script>
+<script src="media-transcription-ui.js"></script>
+</body></html>

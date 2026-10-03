@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>销售工作台 · 易获易成</title>
+  <meta name="description" content="易获易成 AI 保险销售平台的销售工作台。">
+  <link rel="stylesheet" href="sales-workbench.css">
+  <style>[hidden]{display:none!important}</style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="side-nav" aria-label="销售端导航">
+      <a class="brand" href="/sales-workbench.html" aria-label="易获易成销售工作台">
+        <span class="brand-mark">易</span>
+        <span><strong>易获易成</strong><small>AI 保险销售平台</small></span>
+      </a>
+      <nav>
+        <p class="nav-label">销售</p>
+        <a class="nav-item active" href="/sales-workbench.html"><span>客</span>客户工作台</a>
+        <button class="nav-item" type="button" data-panel-target="tasks"><span>办</span>待办中心 <b id="nav-task-count">0</b></button>
+        <button class="nav-item" type="button" data-panel-target="products"><span>案</span>产品建议</button>
+        <p class="nav-label">知识与改进</p>
+        <button class="nav-item" type="button" data-panel-target="profile"><span>记</span>客户记忆</button>
+        <a class="nav-item" href="/quality-dashboard.html"><span>验</span>质量与上线</a>
+        <a class="nav-item" href="/badcase-center.html"><span>归</span>Badcase归因</a>
+        <a class="nav-item" href="/" title="返回原演练工作台"><span>原</span>原工作台</a>
+      </nav>
+      <div class="nav-foot">
+        <div class="avatar">陈</div>
+        <div><strong>演练销售</strong><small>本机演练环境</small></div>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <h1>客户工作台</h1>
+          <p>先处理最值得跟进的客户，再让 AI 帮你把这一句话回好。</p>
+        </div>
+        <div class="system-status" aria-label="系统状态">
+          <a class="small-link" href="/sales-copilot.html">企业微信副驾 ↗</a>
+          <span id="backend-status" class="status-chip loading"><i></i>检查后端</span>
+          <span id="knowledge-status" class="status-chip"><i></i>知识状态待读取</span>
+          <span id="budget-status" class="status-chip"><i></i>AI 成本待读取</span>
+          <button id="refresh-all" class="icon-button" type="button" title="刷新全部数据" aria-label="刷新全部数据">↻</button>
+        </div>
+      </header>
+
+      <div id="global-alert" class="global-alert" hidden role="alert"></div>
+
+      <main class="workbench-grid">
+        <section class="customer-pane" aria-labelledby="customer-pane-title">
+          <div class="pane-head">
+            <div><h2 id="customer-pane-title">客户</h2><span id="customer-count">0 人</span></div>
+            <a class="small-link" href="/customer-simulator.html" target="_blank">＋模拟新客户</a>
+          </div>
+          <div class="customer-tools">
+            <label class="search-box"><span>⌕</span><input id="customer-search" type="search" placeholder="搜索客户、需求或产品" autocomplete="off"></label>
+            <div class="filter-tabs" role="tablist" aria-label="客户筛选">
+              <button class="active" type="button" data-filter="all">全部</button>
+              <button type="button" data-filter="high">高意向</button>
+              <button type="button" data-filter="review">待处理</button>
+              <button type="button" data-filter="purchased">已购</button>
+            </div>
+          </div>
+          <div id="customer-list" class="customer-list" aria-live="polite"></div>
+        </section>
+
+        <section class="conversation-pane" aria-labelledby="conversation-title">
+          <div id="conversation-empty" class="empty-state">
+            <div class="empty-icon">客</div>
+            <h2>选择一位客户开始处理</h2>
+            <p>客户会话、当前购买需求和 AI 回复建议会集中显示在这里。</p>
+          </div>
+
+          <div id="conversation-content" hidden>
+            <header class="conversation-head">
+              <div class="customer-identity">
+                <div id="customer-avatar" class="customer-avatar">客</div>
+                <div>
+                  <div class="identity-line"><h2 id="active-customer-name">—</h2><span id="active-intent" class="intent-badge unknown">待识别</span></div>
+                  <p id="active-customer-meta">—</p>
+                </div>
+              </div>
+              <div class="conversation-actions">
+                <button id="handoff-button" class="secondary-button" type="button">转人工接管</button>
+                <button id="purchased-button" class="secondary-button" type="button">标记已购</button>
+              </div>
+            </header>
+
+            <div class="opportunity-strip">
+              <div id="opportunity-tabs" class="opportunity-tabs" aria-label="购买需求"></div>
+              <button id="refresh-customer" class="text-button" type="button">刷新客户</button>
+            </div>
+
+            <div class="journey-summary">
+              <div><span>销售阶段</span><select id="sales-stage" aria-label="销售阶段">
+                <option value="new_contact">新接触</option><option value="discovery">需求了解</option><option value="solution_discussion">方案沟通</option><option value="closing">促成确认</option><option value="won">已成交</option><option value="paused">暂停</option>
+              </select></div>
+              <div><span>购买对象</span><strong id="summary-person">待了解</strong></div>
+              <div><span>需求方向</span><strong id="summary-purpose">待了解</strong></div>
+              <div><span>年度预算</span><strong id="summary-budget">待了解</strong></div>
+              <div><span>当前处理</span><strong id="summary-processing">正常沟通</strong></div>
+            </div>
+
+            <div id="message-list" class="message-list" aria-live="polite"></div>
+
+            <section class="reply-composer" aria-labelledby="reply-title">
+              <div class="composer-head">
+                <div><h3 id="reply-title">给客户的回复</h3><p id="draft-subtitle">AI 生成后由销售确认，客户现在看不到</p></div>
+                <span id="draft-state" class="draft-state">未生成</span>
+              </div>
+              <textarea id="reply-draft" placeholder="选择客户后，可让 AI 根据当前上下文生成回复草稿；也可以直接手写。" maxlength="4000"></textarea>
+              <div id="draft-guidance" class="draft-guidance">AI 会先回答客户当前问题；如确有必要，每次只追问一个信息。</div>
+              <div class="composer-foot">
+                <div class="composer-secondary">
+                  <button id="generate-draft" class="secondary-button" type="button">生成 AI 草稿</button>
+                  <button id="clear-draft" class="text-button" type="button">清空</button>
+                </div>
+                <button id="confirm-draft" class="primary-button" type="button" disabled>确认并模拟发送</button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <aside class="assistant-pane" aria-labelledby="assistant-title">
+          <div class="assistant-head">
+            <div><span class="ai-mark">AI</span><div><h2 id="assistant-title">销售助手</h2><p>建议有依据，决定权在你</p></div></div>
+          </div>
+          <div class="assistant-tabs" role="tablist" aria-label="销售助手功能">
+            <button class="active" type="button" data-panel="insight">当前建议</button>
+            <button type="button" data-panel="profile">客户画像 <b id="memory-count">0</b></button>
+            <button type="button" data-panel="products">产品匹配</button>
+            <button type="button" data-panel="tasks">待办 <b id="task-count">0</b></button>
+          </div>
+
+          <div id="assistant-empty" class="assistant-empty"><p>选择客户后，这里会显示客户画像、意向依据、产品匹配和待办。</p></div>
+
+          <div id="panel-insight" class="assistant-panel active" data-panel-view="insight">
+            <section class="insight-card emphasis">
+              <div class="card-title"><h3>这轮怎么处理</h3><span id="route-label">等待客户</span></div>
+              <p id="route-explanation">选择客户并读取最新消息后，中控会给出处理建议。</p>
+              <ol id="route-steps" class="route-steps"></ol>
+            </section>
+            <section class="insight-card">
+              <div class="card-title"><h3>意向判断</h3><span id="intent-score">0 分</span></div>
+              <div class="score-track"><i id="intent-score-bar"></i></div>
+              <p id="intent-reason">当前没有足够信号判断客户意向。</p>
+              <small>意向用于排序跟进优先级，不代表成交概率。</small>
+            </section>
+            <section class="insight-card">
+              <div class="card-title"><h3>回复依据</h3><span id="citation-count">0 条</span></div>
+              <div id="citation-list" class="citation-list"><p class="muted-copy">生成草稿后显示引用依据。</p></div>
+            </section>
+          </div>
+
+          <div id="panel-profile" class="assistant-panel" data-panel-view="profile">
+            <section class="insight-card">
+              <div class="card-title"><h3>已确认客户信息</h3><span id="fact-count">0 项</span></div>
+              <div id="confirmed-facts" class="fact-list"></div>
+            </section>
+            <section class="insight-card">
+              <div class="card-title"><h3>待确认变化</h3><button id="reload-memory" class="text-button" type="button">刷新</button></div>
+              <div id="memory-proposals" class="proposal-list"></div>
+            </section>
+          </div>
+
+          <div id="panel-products" class="assistant-panel" data-panel-view="products">
+            <section class="insight-card">
+              <div class="card-title"><h3>产品建议</h3><button id="generate-match" class="text-button" type="button">重新匹配</button></div>
+              <p class="section-intro">B2 只解释候选产品和缺口；销售采纳后，A 才能据此生成对客草稿。</p>
+              <div id="product-recommendations" class="recommendation-list"></div>
+            </section>
+          </div>
+
+          <div id="panel-tasks" class="assistant-panel" data-panel-view="tasks">
+            <section class="insight-card">
+              <div class="card-title"><h3>当前客户待办</h3><span id="open-task-count">0 项</span></div>
+              <div id="task-list" class="task-list"></div>
+            </section>
+          </div>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="confirm-dialog">
+    <form method="dialog">
+      <h2 id="dialog-title">确认操作</h2>
+      <p id="dialog-message"></p>
+      <div class="dialog-actions"><button value="cancel" class="secondary-button">取消</button><button id="dialog-confirm" value="confirm" class="primary-button">确认</button></div>
+    </form>
+  </dialog>
+  <script src="v2-api.js"></script>
+  <script src="sales-workbench.js"></script>
+</body>
+</html>

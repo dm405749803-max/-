@@ -1,0 +1,59 @@
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>同频 · 后端联调台</title>
+  <meta name="description" content="同频保险销售后端联调台：输入模拟客户消息，查看真实后端处理链与AI回复草稿。">
+  <link rel="stylesheet" href="backend-test.css">
+  <style>.new-lead-button{width:100%;border:0;border-radius:8px;background:#eef2ff;color:#3557d5;padding:10px 12px;font-weight:600;margin-bottom:14px}.section-label{display:flex;align-items:center;gap:8px;color:#6c778b;font-size:.7rem;margin:2px 0 13px}.section-label::before,.section-label::after{content:"";height:1px;background:#e9edf4;flex:1}select:disabled{background:#f7f9fc;color:#6c778b}</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span>同</span><div><strong>后端联调台</strong><small>真实接口 · 演练数据 · 不发送消息</small></div></div>
+    <div class="top-actions"><span id="backend-status" class="status neutral">正在检查后端</span><a href="/evaluation-center.html" class="link-button">评测中心</a><a href="/customer-simulator.html" class="link-button">客户模拟端</a><a href="/sales-console.html" class="link-button">销售操作端</a><a href="/" class="link-button">返回工作台</a></div>
+  </header>
+  <main class="layout">
+    <aside class="panel setup-panel">
+      <div class="panel-head"><div><h2>客户刚加入微信</h2><p>购买需求尚未识别，先从首轮对话开始</p></div></div>
+      <div class="panel-body">
+        <button id="new-lead-button" type="button" class="new-lead-button">＋ 开始一个新客户会话</button>
+        <div class="section-label">或继续已有演练记录</div>
+        <label class="field"><span>客户</span><select id="customer-select"></select></label>
+        <label class="field"><span>当前会话／需求线索</span><select id="opportunity-select"></select></label>
+        <dl id="opportunity-profile" class="profile"></dl>
+        <div class="notice">这里只写入本机 <code>demo</code> 工作区，不连接微信，也不会向客户发送消息。</div>
+      </div>
+    </aside>
+
+    <section class="panel chat-panel">
+      <div class="panel-head"><div><h1>给中控台发一条客户消息</h1><p>中控台会按消息类型调用接待规则或 Dify，返回销售可编辑草稿</p></div><span class="status ready">演练模式</span></div>
+      <div id="conversation" class="conversation" aria-live="polite"></div>
+      <div id="reply-result" class="reply-result" hidden></div>
+      <form id="test-form" class="composer">
+        <label for="customer-message">模拟客户消息</label>
+        <textarea id="customer-message" placeholder="例如：你好，我是看你们视频过来的。" maxlength="2000" required></textarea>
+        <div class="examples" aria-label="示例问题">
+          <button type="button" data-example="你好">刚加微信</button>
+          <button type="button" data-example="看你们视频过来的">视频引流</button>
+          <button type="button" data-example="我想给自己做养老准备">表达初步需求</button>
+        </div>
+        <div class="composer-actions"><span id="form-hint">回复只生成草稿，不会发送。</span><button id="send-button" type="submit" class="primary">发送给中控并生成回复</button></div>
+      </form>
+    </section>
+
+    <aside class="panel trace-panel">
+      <div class="panel-head"><div><h2>中控处理过程</h2><p>每一步都调用真实后端接口</p></div></div>
+      <ol id="pipeline" class="pipeline">
+        <li data-step="message"><span>1</span><div><strong>写入客户消息</strong><small>等待测试</small></div></li>
+        <li data-step="context"><span>2</span><div><strong>组装客户上下文</strong><small>短期记忆＋长期资料</small></div></li>
+        <li data-step="knowledge"><span>3</span><div><strong>读取产品与经验</strong><small>版本与适用范围校验</small></div></li>
+        <li data-step="draft"><span>4</span><div><strong>生成回复草稿</strong><small>按消息类型调用接待规则或 Dify</small></div></li>
+        <li data-step="review"><span>5</span><div><strong>等待销售确认</strong><small>本页不执行发送</small></div></li>
+      </ol>
+      <div id="technical-result" class="technical"></div>
+    </aside>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="backend-test.js"></script>
+</body>
+</html>

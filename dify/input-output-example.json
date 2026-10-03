@@ -1,0 +1,19 @@
+{
+  "deprecated": true,
+  "superseded_by": "dify/api-verification-fixture.json",
+  "request": {
+    "inputs": {
+      "schema_version": "sales-assist.v1",
+      "interaction_type": "new_consultation",
+      "latest_message": "这款可以选几年交费？",
+      "context_json": "{\"persons\":[],\"confirmed_facts\":[],\"recent_messages\":[],\"long_term_summary\":{\"text\":\"\",\"through_message_id\":null,\"evidence_message_ids\":[]},\"open_objections\":[],\"promises\":[],\"verified_plan\":null,\"product_scope\":{\"product_id\":\"fixture-product\",\"product_version\":\"fixture-v1\",\"policy_contract_version\":null,\"as_of\":\"2026-09-23\"}}",
+      "knowledge_json": "[{\"citation_id\":\"fixture-terms#交费期\",\"document_id\":\"fixture-terms\",\"version\":\"fixture-v1\",\"location\":\"交费期\",\"text\":\"测试资料显示该演练产品可选3年交。\",\"source\":{\"label\":\"测试条款\",\"url\":\"https://example.invalid/fixture\"}}]"
+    },
+    "response_mode": "blocking",
+    "user": "workspace:demo:customer:fixture-customer"
+  },
+  "workflow_outputs": {
+    "result_json": "{\"status\":\"draft_ready\",\"draft\":\"这份测试资料列出了3年交，其他交费选项还需继续核对。\",\"citation_ids\":[\"fixture-terms#交费期\"],\"next_question\":null,\"next_action\":\"sales_review\",\"risk_flags\":[],\"missing_evidence\":[],\"provider\":\"dify-deepseek\"}"
+  },
+  "note": "这是早期脱敏合同样例，引用ID、元数据字段和分支输出名已过时。不得用于当前API验收；请使用superseded_by指向的隔离fixture。"
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Badcase 归因中心｜好获客·好成交</title>
+  <link rel="stylesheet" href="/badcase-center.css?v=20260929-review2">
+  <link rel="stylesheet" href="/badcase-review.css?v=20260930-evidence1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">坏</span><div><h1>Badcase 归因中心</h1><p>从失败案例回到真实 Trace，再决定修哪里</p></div></div>
+    <nav><a href="/customer-simulator.html">客户模拟测试</a><a href="/sales-console.html" target="_blank">销售端</a><a href="/quality-dashboard.html">上线看板</a><a href="http://127.0.0.1:3000/dashboard" target="_blank">Eval 批量考试</a><a href="http://127.0.0.1:3001" target="_blank">Langfuse 链路</a><button id="refresh">刷新</button></nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div><span class="eyebrow">BASELINE V1</span><h2>分清客观失败、AI未通过和P0人工复核</h2><p>P0是高风险案例等级，不等于系统出了同样数量的错误。点击案例可查看输入、结果、标准和A/B1/B2/RAG轨迹。</p></div>
+      <div class="run-picker"><label for="run-filter">评测批次</label><select id="run-filter"><option value="">全部批次</option></select></div>
+    </section>
+
+    <section class="metrics">
+      <article><span>客观/AI未通过</span><strong id="metric-total">—</strong><small>当前真正需定位的问题</small></article>
+      <article class="danger"><span>P0案例总数</span><strong id="metric-p0">—</strong><small>包含未通过与待人工复核</small></article>
+      <article><span>P0待人工复核</span><strong id="metric-regression">—</strong><small>客观检查与AI评分已过</small></article>
+      <article class="good"><span>已闭环</span><strong id="metric-passed">—</strong><small>修复并通过回归</small></article>
+    </section>
+
+    <section class="workspace">
+      <aside>
+        <div class="section-title"><div><b>问题簇</b><small>按根因聚合</small></div></div>
+        <div id="clusters" class="clusters"></div>
+      </aside>
+
+      <section class="case-panel">
+        <div class="filters">
+          <div><b>案例明细</b><span id="case-count">0条</span></div>
+          <div class="filter-controls">
+            <select id="severity-filter"><option value="">全部等级</option><option>P0</option><option>P1</option><option>P2</option></select>
+            <select id="status-filter"><option value="">全部状态</option><option value="open">待修复</option><option value="needs_review">P0待人工复核</option><option value="fixed">已修复</option><option value="closed">已关闭</option></select>
+            <input id="search" placeholder="搜索案例或原因">
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>等级</th><th>案例</th><th>归因层</th><th>问题说明</th><th>回归</th><th>链路</th></tr></thead>
+            <tbody id="case-rows"><tr><td colspan="6" class="empty">正在读取基线结果…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="detail-dialog">
+    <div class="dialog-head"><div><span id="detail-severity" class="severity">P1</span><h3 id="detail-title">案例详情</h3></div><button id="close-dialog" aria-label="关闭">×</button></div>
+    <div id="detail-body" class="detail-body"></div>
+  </dialog>
+  <div id="toast" class="toast"></div>
+  <script src="/badcase-center.js?v=20260930-evidence1"></script>
+</body>
+</html>

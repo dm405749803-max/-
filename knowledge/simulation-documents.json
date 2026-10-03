@@ -1,0 +1,138 @@
+[
+  {
+    "document_id": "fixture-terms-v1",
+    "version": "fixture-v1",
+    "title": "同频 A 批次隔离演练资料",
+    "knowledge_type": "product",
+    "product_id": "fixture-product",
+    "product_version": "fixture-v1",
+    "policy_contract_versions": [],
+    "scopes": ["new_consultation"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "business_verified",
+    "customer_use": "approved_for_simulation",
+    "valid_from": "2026-09-23",
+    "valid_to": null,
+    "source": {
+      "publisher": "同频 A 批次隔离演练",
+      "label": "A批次隔离演练文档",
+      "url": null,
+      "retrieved_at": "2026-09-23"
+    },
+    "topics": ["payment_term"],
+    "chunks": [
+      {
+        "location": "交费期测试段落",
+        "keywords": ["3年交", "5年交", "10年交", "几年交", "交费"],
+        "text": "虚构的“演练产品 A”在 fixture-v1 版本中只允许 3 年交。5 年交和 10 年交都不在该虚构版本的可选范围内。"
+      }
+    ]
+  },
+  {
+    "document_id": "global-service-process-v1",
+    "version": "global-2026-09-v1",
+    "title": "全局公共：公司统一服务流程",
+    "knowledge_type": "global",
+    "product_id": "GLOBAL",
+    "product_version": "global-2026-09-v1",
+    "policy_contract_versions": [],
+    "scopes": ["new_consultation"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "business_verified",
+    "customer_use": "approved_for_simulation",
+    "valid_from": "2026-09-23",
+    "valid_to": null,
+    "source": {
+      "publisher": "同频产品方案演练",
+      "label": "公司统一服务流程",
+      "url": null,
+      "retrieved_at": "2026-09-29"
+    },
+    "topics": ["contract_service"],
+    "chunks": [
+      {
+        "location": "保单查询通用流程",
+        "keywords": ["保单查询", "查询流程", "公司统一", "怎么查保单"],
+        "text": "保单查询先核验客户身份和保单归属，再由销售或服务人员通过公司授权渠道查询；不得在身份与合同关系未核实前披露保单信息。客户已有保单时应转入服务流程，由人工确认具体办理渠道和所需材料。"
+      },
+      {
+        "location": "中途资金使用核对边界",
+        "keywords": ["中途用钱", "急用钱", "现金价值", "保单贷款", "减保", "部分领取"],
+        "text": "客户中途需要资金时，应核对具体合同是否支持保单贷款、减保或部分领取，并核对退保时的现金价值。不同产品不一定支持这些方式；办理后可能影响保额、保障、现金价值或合同效力，具体以合同和办理时的保单状态为准。不得承诺随时取出或没有损失。"
+      }
+    ]
+  },
+  {
+    "document_id": "global-compliance-v1",
+    "version": "global-2026-09-v1",
+    "title": "全局公共：通用合规规则",
+    "knowledge_type": "global",
+    "product_id": "GLOBAL",
+    "product_version": "global-2026-09-v1",
+    "policy_contract_versions": [],
+    "scopes": ["new_consultation"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "business_verified",
+    "customer_use": "approved_for_simulation",
+    "valid_from": "2026-09-23",
+    "valid_to": null,
+    "source": {
+      "publisher": "同频产品方案演练",
+      "label": "通用合规规则",
+      "url": null,
+      "retrieved_at": "2026-09-29"
+    },
+    "topics": [],
+  "chunks": [
+    {
+      "location": "保证内容与演示内容边界",
+      "keywords": [
+        "领取金额",
+        "保证",
+        "合同保证",
+        "计划书演示",
+        "演示内容"
+      ],
+      "text": "只有保险合同明确约定的内容才能按合同说明；计划书中的演示金额、演示收益或未保证部分不能说成保证结果。客户的具体领取金额必须按当前产品版本、正式合同和正式计划书逐项核对。"
+    },
+    {
+      "location": "核保与承保承诺边界",
+        "keywords": ["核保", "通过核保", "保证通过", "一定承保", "承保"],
+        "text": "销售和AI均不能保证客户一定通过核保。是否承保、以什么条件承保以及最终结果，应以保险公司完成健康告知、资料审核和正式核保后的结论为准；需要时由销售协助客户按正式流程提交资料。"
+      }
+    ]
+  },
+  {
+    "document_id": "global-faq-v1",
+    "version": "global-2026-09-v1",
+    "title": "全局公共：通用FAQ",
+    "knowledge_type": "global",
+    "product_id": "GLOBAL",
+    "product_version": "global-2026-09-v1",
+    "policy_contract_versions": [],
+    "scopes": ["new_consultation"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "business_verified",
+    "customer_use": "approved_for_simulation",
+    "valid_from": "2026-09-23",
+    "valid_to": null,
+    "source": {
+      "publisher": "同频产品方案演练",
+      "label": "通用FAQ",
+      "url": null,
+      "retrieved_at": "2026-09-29"
+    },
+    "topics": [],
+    "chunks": [
+      {
+        "location": "咨询基本原则",
+        "keywords": ["第一次咨询", "基础信息", "先问什么", "通用问题"],
+        "text": "首次沟通先回应客户当前问题，再一次只补问一个会影响下一步判断的关键信息；通用问题可以引用公共知识回答，涉及具体产品事实时必须切换到对应产品及版本的知识。"
+      }
+    ]
+  }
+]

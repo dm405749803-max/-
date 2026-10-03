@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>客户聊天模拟端 · 同频</title>
+  <meta name="description" content="保险销售双视角联调的客户聊天模拟端。">
+  <link rel="stylesheet" href="dual-test.css">
+</head>
+<body class="customer-page">
+  <header class="dual-topbar">
+    <div><strong>客户聊天模拟端</strong><small>模拟微信客户视角 · 只显示最终发送内容</small></div>
+    <nav><a href="/sales-console.html" target="_blank">打开销售端</a><a href="/badcase-center.html" target="_blank">Badcase复核</a><a href="/backend-test.html">返回联调台</a></nav>
+  </header>
+  <main class="customer-shell">
+    <section class="phone" aria-label="客户聊天窗口">
+      <div class="phone-head"><div><strong id="chat-title">保险顾问</strong><small id="connection-state">等待开始测试</small></div><button id="new-session" type="button">新会话</button></div>
+      <div id="customer-chat" class="customer-chat" aria-live="polite"></div>
+      <form id="customer-form" class="customer-composer">
+        <div class="quick-replies">
+          <button type="button" data-message="你好">你好</button>
+          <button type="button" data-message="看你们视频过来的">看视频来的</button>
+          <button type="button" data-message="我想给自己做养老准备">想了解养老</button>
+        </div>
+        <div class="send-row"><textarea id="customer-input" aria-label="客户消息" placeholder="输入客户要说的话" maxlength="2000" required></textarea><button id="customer-send" type="submit">发送</button></div>
+      </form>
+    </section>
+    <aside class="customer-note">
+      <h1>客户只能看到什么？</h1>
+      <ul><li>自己发出的消息</li><li>后端自动发送的安全基础问询</li><li>销售确认后的产品与方案回复</li></ul>
+      <p>AI草稿、客户标签、产品评分、知识库引用和技术记录都不会显示在这里。</p>
+      <div id="customer-toast" class="inline-status">点击“新会话”开始双端测试。</div>
+      <section class="review-guide" aria-labelledby="review-title">
+        <div class="review-guide-head"><div><span>第一版验收</span><h2 id="review-title">首批10条</h2></div><strong id="review-position">1 / 10</strong></div>
+        <div class="review-case-id" id="review-case-id">A01</div>
+        <h3 id="review-case-title"></h3>
+        <p id="review-case-focus"></p>
+        <div class="review-guide-actions"><button id="run-review-case" type="button">运行本条</button><button id="next-review-case" type="button">下一条并运行</button></div>
+        <a id="open-review-case" class="review-link" href="/badcase-center.html" target="_blank">去 Badcase 查看结果并评分</a>
+      </section>
+    </aside>
+  </main>
+  <script src="dual-test-common.js"></script>
+  <script src="customer-simulator.js"></script>
+</body>
+</html>

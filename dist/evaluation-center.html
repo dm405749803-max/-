@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>好获客·好成交｜销售端评测中心</title>
+  <meta name="description" content="用100个自然语言案例验证保险销售AI后端的中控、B1、B2、RAG和A回复。">
+  <link rel="stylesheet" href="evaluation-center.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">评</span><div><strong>销售端评测中心</strong><small>100个业务案例 · 真实后端 · 演练数据</small></div></div>
+    <nav><span id="health-status" class="pill neutral">正在检查后端</span><a href="/backend-test.html">后端联调台</a><a href="/sales-console.html">销售操作端</a><a href="/">返回工作台</a></nav>
+  </header>
+
+  <main class="workspace">
+    <aside class="case-pane">
+      <div class="pane-title"><div><span class="eyebrow">第一版基线</span><h1>100个评测案例</h1></div><span id="progress-count" class="count">0/100</span></div>
+      <div class="filters">
+        <input id="case-search" type="search" placeholder="搜索案例、问题或标准">
+        <div id="group-filters" class="group-filters"></div>
+        <label class="priority-filter"><input id="p0-only" type="checkbox"> 只看P0核心案例</label>
+      </div>
+      <div id="case-list" class="case-list" aria-label="评测案例列表"></div>
+    </aside>
+
+    <section class="run-pane">
+      <article class="case-brief">
+        <div class="case-heading"><div><span id="case-badge" class="case-badge">A01</span><span id="case-group" class="muted">新客户接待</span></div><span id="case-priority" class="pill p0">P0</span></div>
+        <h2 id="case-scenario">新客户只说“你好”。</h2>
+        <div class="standards">
+          <div class="standard good"><span>正确标准</span><p id="case-expected"></p></div>
+          <div class="standard bad"><span id="failure-label">不通过情况</span><p id="case-failure"></p></div>
+        </div>
+      </article>
+
+      <article class="runner-card">
+        <div class="section-title"><div><span class="step">1</span><div><h3>输入测试对话</h3><p>可直接修改问题；多轮测试每行一条，可以“客户：”或“销售：”开头。</p></div></div>
+        <div class="input-grid">
+          <label><span>测试产品范围</span><select id="product-select"></select></label>
+          <label class="message-field"><span>客户问题／多轮对话</span><textarea id="test-input" rows="7" maxlength="6000"></textarea></label>
+        </div>
+        <div class="run-actions"><p>只写入本机 <code>evaluation_v1</code> 演练工作区，不连接微信，不向客户发送。</p><button id="run-button" class="primary" type="button">运行本案例</button></div>
+      </article>
+
+      <article class="pipeline-card">
+        <div class="section-title"><div><span class="step">2</span><div><h3>观察后端执行</h3><p>只要第一个环节出错，就应先修该环节。</p></div></div>
+        <ol id="pipeline" class="pipeline">
+          <li data-step="setup"><b>1</b><div><strong>建立隔离演练会话</strong><small>等待运行</small></div></li>
+          <li data-step="message"><b>2</b><div><strong>中控接收消息</strong><small>等待运行</small></div></li>
+          <li data-step="memory"><b>3</b><div><strong>B1客户信息与意向</strong><small>等待运行</small></div></li>
+          <li data-step="product"><b>4</b><div><strong>B2产品匹配</strong><small>等待运行</small></div></li>
+          <li data-step="rag"><b>5</b><div><strong>RAG证据与A回复</strong><small>等待运行</small></div></li>
+          <li data-step="score"><b>6</b><div><strong>自动检查＋人工判定</strong><small>等待运行</small></div></li>
+        </ol>
+      </article>
+    </section>
+
+    <aside class="result-pane">
+      <div class="result-header"><div><span class="eyebrow">实际运行结果</span><h2>基线判定</h2></div><span id="run-status" class="pill neutral">未运行</span></div>
+      <section class="result-section"><h3>AI回复／阻断结果</h3><div id="draft-output" class="output empty">运行案例后，这里会显示A回复草稿或安全阻断原因。</div></section>
+      <section class="result-section"><h3>模块输出摘要</h3><dl id="module-output" class="module-output"><div><dt>B1</dt><dd>待运行</dd></div><div><dt>B2</dt><dd>待运行</dd></div><div><dt>RAG</dt><dd>待运行</dd></div><div><dt>A</dt><dd>待运行</dd></div></dl></section>
+      <section class="result-section"><h3>自动检查</h3><div id="auto-checks" class="checks"><p class="muted">将检查服务是否执行、高风险承诺、追问数量、引用和人工门禁。</p></div></section>
+      <section class="result-section verdict-section"><h3>人工判定</h3><p class="muted">请对照左侧“正确标准／不通过情况”判断。自动分数不代替业务判断。</p><textarea id="review-notes" rows="3" placeholder="可选：记录具体问题或修改建议"></textarea><div class="verdict-buttons"><button type="button" data-verdict="passed" class="pass">通过</button><button type="button" data-verdict="needs_review" class="review">待复核</button><button type="button" data-verdict="failed" class="fail">不通过</button></div><p id="save-status" class="save-status"></p></section>
+      <pre id="technical-output" class="technical">暂无运行数据。</pre>
+    </aside>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="evaluation-center.js"></script>
+</body>
+</html>

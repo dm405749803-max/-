@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>视频粗剪 · 同频工作台</title>
+  <style>
+    :root{font:16px/1.6 Inter,-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#202a40;background:#fff}
+    *{box-sizing:border-box}body{margin:0;padding:20px}h2,h3,p{margin:0}h2{font-size:1.05rem}h3{font-size:.95rem}small{color:#69758a}button,input{font:inherit}button{cursor:pointer;border:1px solid #e1e6ef;background:#fff;color:#263653;border-radius:8px;padding:9px 13px;min-height:40px;font-size:.875rem}button:hover{background:#f4f6fc}button:disabled{opacity:.5;cursor:not-allowed}.primary{background:#3e61e8;border-color:#3e61e8;color:#fff}.primary:hover{background:#304ed0}.danger{color:#aa4051}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.spread{justify-content:space-between}.panel{border:1px solid #e5e9f0;border-radius:12px;background:#fff;overflow:hidden}.panel-title{padding:15px 17px;border-bottom:1px solid #e5e9f0}.panel-body{padding:17px}.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.75fr);gap:17px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:17px}.file-button{display:inline-flex;align-items:center;gap:9px;border:1px solid #c8d2e2;border-radius:8px;padding:8px 13px;min-height:40px;cursor:pointer;font-size:.875rem}.file-button input{display:none}.privacy{font-size:.8125rem;color:#587067;background:#edf7f2;padding:8px 11px;border-radius:7px}.muted{color:#69758a}.stage{background:#111a2b;border-radius:10px;min-height:270px;display:grid;place-items:center;color:#becae0;overflow:hidden}.stage video{display:block;max-width:100%;max-height:420px;width:100%;background:#111a2b}.stage video[hidden]{display:none}.empty{text-align:center;padding:60px 20px}.empty[hidden]{display:none}.empty strong{display:block;font-weight:550}.empty span{display:block;font-size:.875rem;margin-top:5px;color:#9baccc}.metrics{display:flex;gap:16px;flex-wrap:wrap;margin:13px 0;font-size:.875rem}.metrics strong{font-variant-numeric:tabular-nums}.timeline{height:54px;border-radius:7px;background:#eef2fc;position:relative;overflow:hidden;margin:12px 0;cursor:pointer}.tick{position:absolute;top:0;bottom:0;border-left:1px solid #cbd4e7;pointer-events:none}.tick span{font-size:.7rem;color:#728099;margin-left:4px}.cut{position:absolute;top:0;bottom:0;background:#e879794d;border-left:2px solid #d45b62;border-right:2px solid #d45b62;pointer-events:none}.playhead{position:absolute;top:0;bottom:0;width:2px;background:#294fce;pointer-events:none;z-index:2}.hint,.status{font-size:.8125rem;color:#69758a;line-height:1.7}.status{margin-top:10px;min-height:22px}.status.error{color:#b83a4d}.status.good{color:#17745d}.actions{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}.field{display:flex;flex-direction:column;gap:5px;font-size:.8125rem;color:#53617a;min-width:0}.field input{border:1px solid #dbe1ec;border-radius:7px;padding:7px 9px;width:100%;font-size:.875rem;color:#202a40}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.cut-list{max-height:370px;overflow:auto}.cut-row{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #eef1f6;font-size:.875rem}.cut-row:last-child{border-bottom:0}.cut-row input{margin-top:5px;accent-color:#d45b62}.cut-row button{margin-left:auto;padding:3px 8px;min-height:28px;font-size:.75rem}.cut-row small{display:block}.export{margin-top:17px}.export .panel-body{display:grid;gap:12px}.link{color:#3e61e8;word-break:break-word}.warning{background:#fff4e3;color:#8c5d25;border-radius:7px;padding:10px 12px;font-size:.8125rem}.progress{display:none;height:8px;border-radius:6px;background:#e9edf5;overflow:hidden}.progress>span{display:block;height:100%;width:0;background:#3e61e8;transition:width .2s}button:focus-visible,input:focus-visible,.file-button:focus-within{outline:3px solid #93acff;outline-offset:3px}#analysis-video,#export-source,#export-canvas{display:none}@media(max-width:800px){body{padding:13px}.grid{grid-template-columns:1fr}.stage{min-height:210px}.panel-body{padding:14px}}
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <label class="file-button">选择本地视频<input id="video-file" type="file" accept="video/*"></label>
+    <button id="demo-button" type="button">生成模拟样片（约 10 秒）</button>
+    <span class="privacy">视频只在本机浏览器处理，不上传</span>
+  </div>
+  <div class="grid">
+    <section class="panel" aria-label="视频预览与时间轴">
+      <div class="panel-title row spread"><h2>原片与删减预览</h2><small id="filename">尚未选择视频</small></div>
+      <div class="panel-body">
+        <div class="stage"><video id="video" controls playsinline preload="metadata" hidden></video><div id="empty" class="empty"><strong>选择一段口播视频即可开始</strong><span>建议先用 1 分钟以内的短片体验</span></div></div>
+        <div id="metrics" class="metrics" aria-live="polite"></div>
+        <div id="timeline" class="timeline" role="slider" tabindex="0" aria-label="点击时间轴跳转视频" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        <div class="actions"><button id="analyze" type="button" disabled>检测停顿</button><button id="preview" type="button" disabled>预览删减效果</button><button id="stop-preview" type="button" disabled>停止预览</button></div>
+        <p class="hint">检测会播放并扫描整段视频，建议保持此页在前台。红色区间表示准备删除；点击时间轴可跳转。自动结果由人确认，不会修改原片。</p>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+    <section class="panel" aria-label="删减片段">
+      <div class="panel-title row spread"><h2>删减片段</h2><small>可取消勾选或手动新增</small></div>
+      <div class="panel-body">
+        <div class="two"><label class="field">开始（秒）<input id="cut-start" type="number" min="0" step="0.1" inputmode="decimal" placeholder="例如 4.2"></label><label class="field">结束（秒）<input id="cut-end" type="number" min="0" step="0.1" inputmode="decimal" placeholder="例如 5.0"></label></div>
+        <div class="actions"><button id="add-cut" type="button" disabled>添加删减区间</button><button id="clear-cuts" type="button" disabled>清空区间</button></div>
+        <div id="cut-list" class="cut-list"><p class="hint">加载视频后，这里会显示检测到或手动添加的片段。</p></div>
+      </div>
+    </section>
+  </div>
+  <section class="panel export" aria-label="导出">
+    <div class="panel-title"><h2>导出结果</h2></div>
+    <div class="panel-body">
+      <div class="row"><button id="export-video" class="primary" type="button" disabled>导出剪后视频</button><button id="export-list" type="button" disabled>下载剪辑清单</button><button id="export-fcpxml" type="button" disabled>实验性 FCPXML</button></div>
+      <div id="progress" class="progress"><span id="progress-bar"></span></div>
+      <div id="result" class="hint">导出视频时会以正常速度播放原片，并跳过选中的片段。请保持页面打开；输出格式由浏览器支持情况决定。</div>
+      <div class="warning">这版没有自动语音转文字、字级剪辑或字幕生成。FCPXML 需要在剪辑软件中重连原片；剪映兼容性尚未验证。它不代替正式内容审核。</div>
+    </div>
+  </section>
+  <video id="analysis-video" playsinline preload="auto"></video><video id="export-source" playsinline preload="auto" style="display:none"></video><canvas id="export-canvas"></canvas>
+  <script src="video-editor.js"></script>
+</body>
+</html>

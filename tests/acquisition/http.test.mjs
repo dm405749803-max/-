@@ -1,0 +1,31 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { createAcquisitionServer } from '../../services/acquisition/server.mjs';
+import { fixtureRunner } from './fixtures.mjs';
+
+test('HTTP 创建、确认、报告导出与恢复合同；拒绝跨站请求和无效请求', async t => {
+  const dir = mkdtempSync(join(tmpdir(), 'acquisition-http-'));
+  const runner = fixtureRunner(), { server } = createAcquisitionServer({ dataDir: dir, runner });
+  assert.throws(() => createAcquisitionServer({ dataDir: dir, runner }), { code: 'DATA_DIRECTORY_IN_USE' });
+  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  t.after(async () => { await new Promise(resolve => server.close(resolve)); rmSync(dir, { recursive: true, force: true }); });
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const post = (path, data, headers = {}) => fetch(base + path, { method: 'POST', headers: { 'content-type': 'application/json', ...headers }, body: JSON.stringify(data) });
+  const page = await fetch(base + '/'); assert.equal(page.status, 200); assert.match(await page.text(), /acquisition-workbench\.js/);
+  assert.equal((await fetch(base + '/api/acquisition/tasks')).status, 200);
+  assert.equal((await post('/api/acquisition/tasks', { text: '测试文案' }, { origin: 'https://other.example' })).status, 403);
+  assert.equal((await post('/api/acquisition/tasks', null)).status, 400);
+  const create = await post('/api/acquisition/tasks', { title: '接口测试', text: '先明确每年的支出，再考虑退休现金流。', platform: 'douyin' });
+  assert.equal(create.status, 201); const task = (await create.json()).data;
+  assert.equal((await fetch(base + `/api/acquisition/tasks/${task.id}/report.json`)).status, 409);
+  const response = await post(`/api/acquisition/tasks/${task.id}/command`, { action: 'confirm', mode: 'full', command_id: crypto.randomUUID(), expected_revision: task.revision });
+  assert.equal(response.status, 200); assert.equal((await response.json()).data.status, 'report_ready');
+  const download = await fetch(base + `/api/acquisition/tasks/${task.id}/report.json`);
+  assert.match(download.headers.get('content-disposition'), /attachment/);
+  assert.equal((await download.json()).runs[0].provider, 'test_fixture');
+  assert.equal((await fetch(base + '/api/v2/customers')).status, 404);
+});

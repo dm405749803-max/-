@@ -1,0 +1,97 @@
+[
+  {
+    "document_id": "cpic-mhr-2025-terms",
+    "version": "public-2025-09-04",
+    "title": "太保蛮好的人生（2025）年金保险（互联网）条款",
+    "knowledge_type": "product",
+    "product_id": "cpic-mhr-2025",
+    "product_version": "public-2025-09-04",
+    "policy_contract_versions": [],
+    "scopes": ["new_consultation"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "public_source_checked",
+    "customer_use": "business_review_required",
+    "valid_from": "2025-09-04",
+    "valid_to": null,
+    "source": {
+      "publisher": "中国太平洋人寿保险股份有限公司",
+      "label": "保险条款",
+      "url": "https://life.cpic.com.cn/upload/resources/file/2025/09/04/88916.pdf",
+      "retrieved_at": "2026-09-23"
+    },
+    "topics": ["product_identity", "payment_term", "cash_value", "policy_loan", "benefit", "contract_service"],
+    "chunks": [
+      {
+        "location": "产品身份与交费期摘要",
+        "keywords": ["几年交", "交费", "缴费", "趸交", "3年", "5年", "10年", "20年", "计划一", "计划二"],
+        "text": "公开条款版本为太平洋人寿[2025]年金保险119号。工作台已有公开资料摘录显示：保障计划一可选趸交、3年交或5年交；保障计划二可选趸交或3年交。10年交和20年交不属于该版本当前公开的可选交费期。"
+      },
+      {
+        "location": "客户个人方案边界",
+        "keywords": ["收益", "IRR", "回本", "现金价值", "能领多少", "保费", "计划书"],
+        "text": "客户实际保费、基本保险金额、逐年现金价值、领取金额和IRR必须根据客户正式计划书核对。祝贺金给付比例、基本保险金额或现金价值变化不得直接表述为客户收益率。"
+      }
+    ]
+  },
+  {
+    "document_id": "cpic-mhr-2025-sum-insured-table",
+    "version": "public-2025-09-04",
+    "title": "太保蛮好的人生（2025）基本保险金额表",
+    "knowledge_type": "product",
+    "product_id": "cpic-mhr-2025",
+    "product_version": "public-2025-09-04",
+    "policy_contract_versions": [],
+    "scopes": ["new_consultation"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "public_source_checked",
+    "customer_use": "business_review_required",
+    "valid_from": "2025-09-04",
+    "valid_to": null,
+    "source": {
+      "publisher": "中国太平洋人寿保险股份有限公司",
+      "label": "基本保险金额表",
+      "url": "https://www.cpic.com.cn/upload/resources/file/2025/09/04/88917.pdf",
+      "retrieved_at": "2026-09-23"
+    },
+    "topics": ["plan_calculation", "sum_insured", "premium"],
+    "chunks": [
+      {
+        "location": "使用边界",
+        "keywords": ["保额", "保费", "计划书", "测算", "能领多少"],
+        "text": "基本保险金额表需按被保险人年龄、性别、保障计划、交费期间和实际保费使用。未有完整正式计划书时，不能由AI推测客户个人金额。"
+      }
+    ]
+  },
+  {
+    "document_id": "training-experience-surrender-call",
+    "version": "training-1",
+    "title": "训练经验：退保咨询转人工",
+    "knowledge_type": "experience",
+    "product_id": null,
+    "product_version": null,
+    "policy_contract_versions": [],
+    "scopes": ["contract_service"],
+    "lifecycle_status": "active",
+    "index_status": "ready",
+    "verification_status": "confirmed_training",
+    "customer_use": "internal_process_only",
+    "valid_from": "2026-09-01",
+    "valid_to": null,
+    "source": {
+      "publisher": "训练案例",
+      "label": "人工确认经验",
+      "url": null,
+      "retrieved_at": "2026-09-23"
+    },
+    "topics": ["surrender", "complaint", "human_handoff"],
+    "chunks": [
+      {
+        "location": "处理流程",
+        "keywords": ["退保", "投诉", "转人工"],
+        "text": "客户询问退保或投诉时，不由草稿助手承诺金额、时效或办理结果，转人工核实。"
+      }
+    ]
+  }
+]

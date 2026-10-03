@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>质量与上线看板｜好获客·好成交</title>
+  <link rel="stylesheet" href="/quality-dashboard.css?v=20261001-1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">验</span><div><h1>质量与上线看板</h1><p>一张表看清评测、线上数据和发布门槛</p></div></div>
+    <nav><a href="/sales-console.html">销售端</a><a href="/badcase-center.html">Badcase</a><a href="http://127.0.0.1:3000/dashboard" target="_blank">Eval</a><a href="http://127.0.0.1:3001" target="_blank">Langfuse</a><button id="refresh">刷新</button></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div><span class="eyebrow">RELEASE CONTROL</span><h2 id="release-title">正在读取验收状态…</h2><p id="release-copy">评测通过与线上业务指标分开计算。</p></div>
+      <label>评测批次<select id="run-filter"><option value="">自动选择最新批次</option></select></label>
+    </section>
+
+    <section class="cards">
+      <article><span>最终通过</span><strong id="closed-count">—</strong><small id="closed-note">评测案例</small></article>
+      <article><span>未闭环</span><strong id="unresolved-count">—</strong><small>P0/待复核/待修复</small></article>
+      <article><span>自然度均分</span><strong id="naturalness">—</strong><small id="naturalness-note">人工1–5分</small></article>
+      <article><span>已记录 Trace</span><strong id="trace-count">—</strong><small id="trace-note">Langfuse 与本地同一 trace_id</small></article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><div><h3>上线门槛</h3><p>只有有数据的指标才会判定通过或失败；“待补数据”不当作0分。</p></div><span id="release-badge" class="badge pending">读取中</span></div>
+      <div class="table-wrap"><table><thead><tr><th>指标</th><th>目标</th><th>本次结果</th><th>判定</th><th>说明</th></tr></thead><tbody id="gate-rows"></tbody></table></div>
+    </section>
+
+    <section class="two-col">
+      <article class="panel">
+        <div class="panel-head"><div><h3>真实使用漏斗</h3><p>来自销售中台埋点，不用100条离线评测冒充。</p></div></div>
+        <div id="funnel" class="funnel"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h3>埋点接入情况</h3><p>每个事件同时统计次数和去重客户UV。</p></div></div>
+        <div id="events" class="events"></div>
+      </article>
+    </section>
+  </main>
+  <div id="toast" class="toast"></div>
+  <script src="/quality-dashboard.js?v=20261001-1"></script>
+</body>
+</html>

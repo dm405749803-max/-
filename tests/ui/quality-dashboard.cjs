@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const dist=path.join(__dirname,'../../dist');
+const html=fs.readFileSync(path.join(dist,'quality-dashboard.html'),'utf8');
+const js=fs.readFileSync(path.join(dist,'quality-dashboard.js'),'utf8');
+const badcase=fs.readFileSync(path.join(dist,'badcase-center.js'),'utf8');
+assert.match(html,/质量与上线看板/);
+assert.match(html,/上线门槛/);
+assert.match(html,/真实使用漏斗/);
+assert.match(js,/\/api\/v2\/observability\/metrics/);
+assert.match(js,/待补数据/);
+assert.match(badcase,/project\/insurance-sales\/traces/);
+console.log('PASS — quality dashboard separates release gates, online metrics and trace evidence.');

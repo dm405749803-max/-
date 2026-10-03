@@ -1,0 +1,98 @@
+{
+  "captured_at": "2026-09-23T17:02:06+08:00",
+  "published": true,
+  "original_app_untouched": "d1272570-9c2c-44d7-aa7b-63638ed47abe",
+  "isolated_app": {
+    "id": "96ec95db-3e0a-4f77-954e-7601e050ac23",
+    "name": "同频｜A批次有据销售草稿（隔离测试）",
+    "workflow_url": "http://localhost:8080/app/96ec95db-3e0a-4f77-954e-7601e050ac23/workflow",
+    "model": "DeepSeek V4.1 Flash",
+    "model_id": "deepseek-flash",
+    "node_count": 8,
+    "edge_count": 7,
+    "api_endpoint": "http://localhost:8080/v1",
+    "api_key_count": 1,
+    "api_key_storage": "/Users/damo/Documents/ChatGPT/太平洋销售/.env.dify-a.local",
+    "api_key_file_mode": "0600"
+  },
+  "isolated_dataset": {
+    "id": "79f29333-2e70-4248-9b08-ef5584dafa27",
+    "name": "同频 A批次｜隔离RAG测试知识库｜非真实产品",
+    "documents_url": "http://localhost:8080/datasets/79f29333-2e70-4248-9b08-ef5584dafa27/documents",
+    "indexing_technique": "economy",
+    "document_id": "569bb318-1267-4618-83c1-3b7ebec03414",
+    "document_name": "dify-fixture-business-approved.md",
+    "indexing_status": "completed",
+    "enabled": true
+  },
+  "runs": [
+    {
+      "id": "fc59121e-f3fd-408c-97ae-a4bb3064cad0",
+      "started_at": "2026-09-23T16:50:09+08:00",
+      "status": "succeeded",
+      "case": "published fixture-v1 positive evidence",
+      "output_key": "draft_result_json",
+      "total_tokens": 711,
+      "result": {
+        "status": "draft_ready",
+        "citation_ids": ["fixture-terms-v1#交费期测试段落"],
+        "next_action": "sales_review",
+        "provider": "dify-deepseek"
+      }
+    },
+    {
+      "id": "ae8d679b-ef6c-4cd3-bcb3-9e00fcf46104",
+      "started_at": "2026-09-23T16:50:29+08:00",
+      "status": "succeeded",
+      "case": "published fixture-v2 rejects fixture-v1 evidence",
+      "output_key": "blocked_result_json",
+      "total_tokens": 0,
+      "executed_nodes": ["服务端输入", "知识检索", "风险与证据前置门", "是否允许生成", "阻断输出"],
+      "result": {
+        "status": "needs_source",
+        "citation_ids": [],
+        "next_action": "verify_source",
+        "risk_flags": ["scope_or_version_filter_empty"],
+        "missing_evidence": ["no_prefiltered_evidence"]
+      }
+    },
+    {
+      "id": "bf6ebfd0-7b73-46d6-af12-b5b1213df72f",
+      "started_at": "2026-09-23T16:27:02+08:00",
+      "status": "succeeded",
+      "case": "diagnostic run before reasoning-tag parser fix",
+      "total_tokens": 680,
+      "result": {
+        "status": "human_required",
+        "missing_evidence": ["dify_output_not_json"]
+      },
+      "resolution": "postcheck now removes DeepSeek <think> blocks and parses the first JSON object before applying the citation whitelist"
+    }
+  ],
+  "api_verification_runs": [
+    {
+      "id": "91ef1f3a-f2a3-4c0c-8d8b-635d843ba0a8",
+      "case": "positive-v1",
+      "http_status": 200,
+      "workflow_status": "succeeded",
+      "output_key": "draft_result_json",
+      "result_status": "draft_ready",
+      "citation_ids": ["fixture-terms-v1#交费期测试段落"],
+      "next_action": "sales_review",
+      "total_tokens": 788,
+      "passed": true
+    },
+    {
+      "id": "8cc0246d-8526-4ecd-9c60-0041a5148d84",
+      "case": "wrong-version-v2",
+      "http_status": 200,
+      "workflow_status": "succeeded",
+      "output_key": "blocked_result_json",
+      "result_status": "needs_source",
+      "citation_ids": [],
+      "next_action": "verify_source",
+      "total_tokens": 0,
+      "passed": true
+    }
+  ]
+}
