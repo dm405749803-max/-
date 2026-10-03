@@ -1,3 +1,4 @@
+import { createDeepSeekRunner } from './server/deepseek-client.mjs';
 import { createServer } from 'node:http';
 import { execFile as execFileCallback } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
@@ -56,6 +57,7 @@ await loadLocalEnv();
 
 const PORT = Number(process.env.LOCAL_PORT || 8788);
 const DIFY_BASE = String(process.env.DIFY_API_BASE_URL || 'http://localhost/v1').replace(/\/$/, '');
+const DEEPSEEK_KEY = String(process.env.DEEPSEEK_API_KEY || '');
 const DIFY_KEY = String(process.env.DIFY_APP_API_KEY || '');
 const DIFY_SALES_TIMEOUT_MS = Math.max(30_000, Math.min(120_000, Number(process.env.DIFY_SALES_TIMEOUT_MS) || 60_000));
 const BACKEND_B1_ENABLED = process.env.TONGPIN_ENABLE_BACKEND_B1 === '1';
@@ -158,7 +160,9 @@ function trackedDifyRunner(baseRunner, workflow) {
   };
 }
 
-const runDifyWorkflow = DIFY_KEY
+const runDifyWorkflow = DEEPSEEK_KEY
+  ? trackedDifyRunner(createDeepSeekRunner({ apiKey: DEEPSEEK_KEY, workflow: 'A_sales_draft' }), 'A_sales_draft')
+  : DIFY_KEY
   ? trackedDifyRunner(createDifyRunner({ baseUrl: DIFY_BASE, apiKey: DIFY_KEY, timeoutMs: DIFY_SALES_TIMEOUT_MS }), 'A_sales_draft')
   : async () => { throw new Error('DIFY_NOT_CONFIGURED'); };
 const transcribeMedia = DASHSCOPE_ASR_KEY
@@ -170,7 +174,7 @@ if (BACKEND_B1_ENABLED) {
   const { createBackendB1 } = await import('./server/backend-b1.mjs');
   backendB1 = createBackendB1({
     store: v2Store, readJson, sendJson: json,
-    runMemoryDify: DIFY_MEMORY_KEY ? trackedDifyRunner(createDifyRunner({
+    runMemoryDify: DEEPSEEK_KEY ? trackedDifyRunner(createDeepSeekRunner({ apiKey: DEEPSEEK_KEY, workflow: 'B1_memory' }), 'B1_memory') : DIFY_MEMORY_KEY ? trackedDifyRunner(createDifyRunner({
       baseUrl: DIFY_MEMORY_BASE,
       apiKey: DIFY_MEMORY_KEY,
       timeoutMs: DIFY_MEMORY_TIMEOUT_MS
@@ -183,7 +187,7 @@ if (BACKEND_B2_ENABLED) {
   const { createBackendB2 } = await import('./server/backend-b2.mjs');
   backendB2 = createBackendB2({
     store: v2Store, readJson, sendJson: json,
-    runMatchDify: DIFY_MATCH_KEY ? trackedDifyRunner(createDifyRunner({ baseUrl: DIFY_MATCH_BASE, apiKey: DIFY_MATCH_KEY }), 'B2_product_match') : null,
+    runMatchDify: DEEPSEEK_KEY ? trackedDifyRunner(createDeepSeekRunner({ apiKey: DEEPSEEK_KEY, workflow: 'B2_product_match' }), 'B2_product_match') : DIFY_MATCH_KEY ? trackedDifyRunner(createDifyRunner({ baseUrl: DIFY_MATCH_BASE, apiKey: DIFY_MATCH_KEY }), 'B2_product_match') : null,
     allowSimulationProducts: process.env.TONGPIN_ENABLE_SIMULATION_KNOWLEDGE === '1'
   });
 }
@@ -295,7 +299,7 @@ const routeV2 = createV2Api({
   } : {}),
   readJson,
   sendJson: json,
-  aiConfigured: Boolean(DIFY_KEY),
+  aiConfigured: Boolean(DEEPSEEK_KEY || DIFY_KEY),
   transcribeMedia,
   mediaTranscriptionConfigured: Boolean(transcribeMedia),
   ...(backendB2 ? {
@@ -778,12 +782,14 @@ const server = createServer(async (req, res) => {
       ok: true,
       mode: 'local',
       dify_configured: Boolean(DIFY_KEY),
+      deepseek_configured: Boolean(DEEPSEEK_KEY),
+      text_ai_provider: DEEPSEEK_KEY ? 'deepseek' : DIFY_KEY ? 'dify' : 'unconfigured',
       dify_endpoint: DIFY_BASE,
       backend_b1_enabled: BACKEND_B1_ENABLED,
       backend_b2_enabled: BACKEND_B2_ENABLED,
       backend_only: BACKEND_ONLY,
-      memory_workflow_configured: BACKEND_B1_ENABLED && Boolean(DIFY_MEMORY_KEY),
-      product_match_workflow_configured: BACKEND_B2_ENABLED && Boolean(DIFY_MATCH_KEY),
+      memory_workflow_configured: BACKEND_B1_ENABLED && Boolean(DEEPSEEK_KEY || DIFY_MEMORY_KEY),
+      product_match_workflow_configured: BACKEND_B2_ENABLED && Boolean(DEEPSEEK_KEY || DIFY_MATCH_KEY),
       asr_configured: Boolean(transcribeMedia),
       asr_model: transcribeMedia ? DASHSCOPE_ASR_MODEL : null,
       observability_configured: true,
